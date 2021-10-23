@@ -16,8 +16,8 @@ class CreateCreditAccountsTable extends Migration
         Schema::create('credit_accounts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
-            $table->decimal('balance', 9, 2, true);
+            $table->text('description')->nullable();
+            $table->decimal('balance', 9, 2);
             $table->boolean('active')->default(true);
 
             $table->unsignedBigInteger('user_id');

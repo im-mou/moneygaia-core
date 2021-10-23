@@ -24,7 +24,7 @@ class TransactionFactory extends Factory
         return [
             'title' => $this->faker->word(),
             'description' => $this->faker->sentence(10),
-            'ammount' => $this->faker->randomFloat(2, -500, 2000),
+            'ammount' => $this->faker->randomFloat(2, -1000, $this->faker->boolean(90) ? -1 : 1000),
             'starred' => $this->faker->boolean(5),
         ];
     }

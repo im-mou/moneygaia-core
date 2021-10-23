@@ -16,9 +16,9 @@ class CreateUserInfosTable extends Migration
         Schema::create('user_infos', function (Blueprint $table) {
             $table->id();
 
-            $table->decimal('total_balance', 9, 2, true);
+            $table->decimal('total_balance', 9, 2);
             $table->string('currency');
-            $table->string('country');
+            $table->string('country')->nullable();
             $table->string('language');
 
             $table->unsignedBigInteger('user_id');

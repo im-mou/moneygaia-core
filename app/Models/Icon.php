@@ -20,4 +20,5 @@ class Icon extends Model
         self::TRANSACTIONS_GROUP,
         self::GOALS_GROUP,
     ];
+
 }

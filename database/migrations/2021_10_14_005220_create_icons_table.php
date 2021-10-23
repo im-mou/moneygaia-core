@@ -15,7 +15,7 @@ class CreateIconsTable extends Migration
     public function up()
     {
         Schema::create('icons', function (Blueprint $table) {
-            $$table->id();
+            $table->id();
             $table->string('title');
             $table->string('value');
             $table->enum('group', Icon::ALLOWED_GROUPS);

@@ -17,9 +17,9 @@ class CreateGoalsTable extends Migration
             $table->id();
 
             $table->string('title');
-            $table->text('description');
-            $table->decimal('ammount', 9, 2, false);
-            $table->dateTime('due_date');
+            $table->text('description')->nullable();
+            $table->decimal('ammount', 9, 2);
+            $table->dateTime('due_date')->nullable();
             $table->boolean('achived')->default(false);
 
             $table->unsignedBigInteger('user_id');

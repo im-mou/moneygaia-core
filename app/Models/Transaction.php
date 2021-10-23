@@ -11,12 +11,12 @@ class Transaction extends Model
 
     protected $guarded = [];
 
-    public function type()
+    public function transaction_type()
     {
         return $this->belongsTo(TransactionType::class);
     }
 
-    public function account()
+    public function credit_account()
     {
         return $this->belongsTo(CreditAccount::class);
     }

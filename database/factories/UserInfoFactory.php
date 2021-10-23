@@ -22,7 +22,7 @@ class UserInfoFactory extends Factory
     public function definition()
     {
         return [
-            'total_balance' => $this->faker->randomFloat(2, 0, 2000),
+            'total_balance' => $this->faker->randomFloat(2, -100, 2000),
             'currency' => $this->faker->currencyCode(),
             'country' => $this->faker->countryCode(),
             'language' => $this->faker->languageCode(),

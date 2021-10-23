@@ -17,10 +17,10 @@ class CreateBudgetsTable extends Migration
             $table->id();
 
             $table->string('title');
-            $table->text('description');
-            $table->decimal('ammount', 9, 2, false);
+            $table->text('description')->nullable();
+            $table->decimal('ammount', 9, 2);
             $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->dateTime('end_date')->nullable();
 
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('transaction_type_id');

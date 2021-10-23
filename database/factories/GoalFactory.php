@@ -24,7 +24,7 @@ class GoalFactory extends Factory
         return [
             'title' => $this->faker->word(),
             'description' => $this->faker->sentence(10),
-            'ammount' => $this->faker->randomFloat(2, -500, 2000),
+            'ammount' => $this->faker->randomFloat(2, 5, 2000),
             'due_date' => $this->faker->dateTimeBetween('+0 days', '+2 month'),
             'achived' => $this->faker->boolean(20),
         ];

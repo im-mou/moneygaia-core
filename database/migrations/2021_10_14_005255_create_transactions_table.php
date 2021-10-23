@@ -17,8 +17,8 @@ class CreateTransactionsTable extends Migration
             $table->id();
 
             $table->string('title');
-            $table->text('description');
-            $table->decimal('ammount', 9, 2, true);
+            $table->text('description')->nullable();
+            $table->decimal('ammount', 9, 2);
             $table->boolean('starred')->default(false);
 
             $table->unsignedBigInteger('user_id');

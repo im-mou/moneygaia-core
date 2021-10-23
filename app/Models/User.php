@@ -52,7 +52,7 @@ class User extends Authenticatable
         return $this->hasMany(Budget::class);
     }
 
-    public function info()
+    public function user_info()
     {
         return $this->hasOne(UserInfo::class);
     }
@@ -60,11 +60,6 @@ class User extends Authenticatable
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
-    }
-
-    public function icons()
-    {
-        return $this->hasMany(Icon::class);
     }
 
     public function goals()
