@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\CreditAccountController;
+use App\Http\Controllers\GoalController;
+use App\Http\Controllers\IconController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +30,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+
+    Route::apiResource('budgets', BudgetController::class);
+    Route::apiResource('credit-accounts', CreditAccountController::class);
+    Route::apiResource('goals', GoalController::class);
+    Route::apiResource('icons', IconController::class);
+    Route::apiResource('transactions', TransactionController::class);
 });
