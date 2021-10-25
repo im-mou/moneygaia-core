@@ -3,10 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\CreditAccount;
+use App\Services\CreditAccountService;
 use Illuminate\Http\Request;
 
 class CreditAccountController extends Controller
 {
+
+    private $creditAccountService;
+
+    public function __construct()
+    {
+        $this->creditAccountService = new CreditAccountService();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +23,7 @@ class CreditAccountController extends Controller
      */
     public function index()
     {
-        //
+        return $this->creditAccountService->index();
     }
 
     /**
@@ -25,7 +34,7 @@ class CreditAccountController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return $this->creditAccountService->store($request);
     }
 
     /**
@@ -36,7 +45,7 @@ class CreditAccountController extends Controller
      */
     public function show(CreditAccount $creditAccount)
     {
-        //
+        return $this->creditAccountService->show($creditAccount);
     }
 
     /**
@@ -48,7 +57,7 @@ class CreditAccountController extends Controller
      */
     public function update(Request $request, CreditAccount $creditAccount)
     {
-        //
+        return $this->creditAccountService->update($request, $creditAccount);
     }
 
     /**
@@ -59,6 +68,6 @@ class CreditAccountController extends Controller
      */
     public function destroy(CreditAccount $creditAccount)
     {
-        //
+        return $this->creditAccountService->destroy($creditAccount);
     }
 }

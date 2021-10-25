@@ -11,6 +11,10 @@ class CreditAccountType extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'enabled' => 'boolean'
+    ];
+
     public function accounts()
     {
         return $this->hasMany(CreditAccount::class);

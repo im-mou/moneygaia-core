@@ -11,6 +11,11 @@ class CreditAccount extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'balance' => 'float',
+        'active' => 'boolean'
+    ];
+
     public function credit_account_type()
     {
         return $this->belongsTo(CreditAccountType::class);

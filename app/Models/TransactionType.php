@@ -11,6 +11,10 @@ class TransactionType extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'outflow' => 'boolean'
+    ];
+
     public function transactions()
     {
         return $this->hasMany(Transaction::class);

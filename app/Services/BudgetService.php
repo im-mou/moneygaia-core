@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use App\Http\Resources\BudgetResource;
 use App\Models\Budget;
+use Illuminate\Support\Facades\Config;
 
 class BudgetService
 {
@@ -40,7 +41,7 @@ class BudgetService
                     })
             ],
             'description'  => 'string',
-            'ammount'  => ['required', 'regex:/(?=.*?[0-9])(^-?\d+\.\d{2}$)|(?=.*?[1-9])(^\d{1,}$)/us'],
+            'ammount'  => ['required', Config::get('constants.validate.money')],
             'start_date'  => 'required|string',
             'end_date'  => 'string',
             'transaction_type'  => 'required|integer|exists:transaction_types,id',
@@ -71,7 +72,7 @@ class BudgetService
      */
     public function show($id)
     {
-        $budget = Budget::where('user_id', Auth::user()->id)->findOrFail($id);
+        $budget = Budget::findOrFail($id)->where('user_id', Auth::user()->id);
 
         return new BudgetResource($budget);
     }
@@ -95,7 +96,7 @@ class BudgetService
                     })
             ],
             'description'  => 'string',
-            'ammount'  => ['required', 'regex:/(?=.*?[0-9])(^-?\d+\.\d{2}$)|(?=.*?[1-9])(^\d{1,}$)/us'],
+            'ammount'  => ['required', Config::get('constants.validate.money')],
             'start_date'  => 'string',
             'end_date'  => 'string',
             'transaction_type'  => 'integer|exists:transaction_types,id',
