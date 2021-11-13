@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Budget;
 use App\Services\BudgetService;
 use Illuminate\Http\Request;
@@ -39,10 +38,10 @@ class BudgetController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Budget  $budget
+     * @param  int  $budget
      * @return \Illuminate\Http\Response
      */
-    public function show(Budget $budget)
+    public function show(int $budget)
     {
         return $this->budgetService->show($budget);
     }
@@ -51,10 +50,10 @@ class BudgetController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Budget  $budget
+     * @param  int  $budget
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Budget $budget)
+    public function update(Request $request, int $budget)
     {
         return $this->budgetService->update($request, $budget);
     }
@@ -62,10 +61,10 @@ class BudgetController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Budget  $budget
+     * @param  int  $budget
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Budget $budget)
+    public function destroy(int $budget)
     {
         return $this->budgetService->destroy($budget);
     }

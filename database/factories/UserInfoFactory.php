@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\UserInfo;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Config;
 
 class UserInfoFactory extends Factory
 {
@@ -26,6 +27,7 @@ class UserInfoFactory extends Factory
             'currency' => $this->faker->currencyCode(),
             'country' => $this->faker->countryCode(),
             'language' => $this->faker->languageCode(),
+            'date_format' => Config::get('constants.user_info_default_date_format'),
         ];
     }
 }

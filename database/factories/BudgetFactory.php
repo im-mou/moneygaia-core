@@ -22,11 +22,11 @@ class BudgetFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->word(),
-            'description' => $this->faker->sentence(10),
-            'ammount' => $this->faker->randomFloat(2, 0, 500),
-            'start_date' => $this->faker->dateTimeBetween('+0 days', '+1 month'),
-            'end_date' => $this->faker->dateTimeBetween('+1 month', '+2 month'),
+            "title" => $this->faker->word(),
+            "description" => $this->faker->sentence(10),
+            "ammount" => $this->faker->randomFloat(2, 0, 500),
+            "start_date" => $this->faker->dateTimeBetween("+0 days", "+1 month"),
+            "end_date" => $this->faker->dateTimeBetween("+1 month", "+2 month"),
         ];
     }
 }

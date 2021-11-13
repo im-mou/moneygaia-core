@@ -20,21 +20,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/token', [AuthController::class, 'login']);
+Route::post("/token", [AuthController::class, "login"]);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware("auth:sanctum")->group(function () {
+    Route::post("/token/revoke", [AuthController::class, "logout"]);
+    Route::post("/token/revoke/all", [
+        AuthController::class,
+        "logoutAllDevices",
+    ]);
 
-    Route::post('/token/revoke', [AuthController::class, 'logout']);
-    Route::post('/token/revoke/all', [AuthController::class, 'logoutAllDevices']);
-
-    Route::get('/user', function (Request $request) {
+    Route::get("/user", function (Request $request) {
         return $request->user();
     });
 
-
-    Route::apiResource('budgets', BudgetController::class);
-    Route::apiResource('credit-accounts', CreditAccountController::class);
-    Route::apiResource('goals', GoalController::class);
-    Route::apiResource('icons', IconController::class);
-    Route::apiResource('transactions', TransactionController::class);
+    Route::apiResource("budgets", BudgetController::class);
+    Route::apiResource("credit-accounts", CreditAccountController::class);
+    Route::apiResource("goals", GoalController::class);
+    Route::apiResource("icons", IconController::class);
+    Route::apiResource("transactions", TransactionController::class);
 });

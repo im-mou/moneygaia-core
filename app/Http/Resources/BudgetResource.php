@@ -22,7 +22,7 @@ class BudgetResource extends JsonResource
             "ammount" => $this->ammount,
             "start_date" => $this->start_date,
             "end_date" => $this->end_date,
-            'created_at' => $this->created_at,
+            "created_at" => $this->created_at,
             "transaction_type" => new TransactionTypeResource($this->transaction_type),
         ];
     }

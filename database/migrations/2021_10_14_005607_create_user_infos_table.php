@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 
 class CreateUserInfosTable extends Migration
@@ -20,6 +21,7 @@ class CreateUserInfosTable extends Migration
             $table->string('currency');
             $table->string('country')->nullable();
             $table->string('language');
+            $table->string('date_format')->default(Config::get('constants.user_info_default_date_format'));
 
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

@@ -13,9 +13,9 @@ class Budget extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'ammount' => 'float',
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
+        "ammount" => "float",
+        "start_date" => "datetime",
+        "end_date" => "datetime",
     ];
 
     public function transaction_type()
