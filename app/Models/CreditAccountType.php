@@ -12,7 +12,7 @@ class CreditAccountType extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'enabled' => 'boolean'
+        "enabled" => "boolean",
     ];
 
     public function accounts()

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\CreditAccountType;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CreditAccountTypeFactory extends Factory
@@ -24,7 +25,9 @@ class CreditAccountTypeFactory extends Factory
         return [
             'title' => $this->faker->word(),
             'type' => $this->faker->creditCardType(),
-            'enabled' => $this->faker->boolean(95)
+            'enabled' => $this->faker->boolean(95),
+            "created_at" => Carbon::now()->format('Y-m-d H:i:s'),
+            "updated_at" => Carbon::now()->format('Y-m-d H:i:s'),
         ];
     }
 }

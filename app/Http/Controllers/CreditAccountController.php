@@ -40,10 +40,10 @@ class CreditAccountController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\CreditAccount  $creditAccount
+     * @param  int $creditAccount
      * @return \Illuminate\Http\Response
      */
-    public function show(CreditAccount $creditAccount)
+    public function show(int $creditAccount)
     {
         return $this->creditAccountService->show($creditAccount);
     }
@@ -52,10 +52,10 @@ class CreditAccountController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CreditAccount  $creditAccount
+     * @param  int  $creditAccount
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CreditAccount $creditAccount)
+    public function update(Request $request, int $creditAccount)
     {
         return $this->creditAccountService->update($request, $creditAccount);
     }
@@ -63,10 +63,10 @@ class CreditAccountController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CreditAccount  $creditAccount
+     * @param  int  $creditAccount
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CreditAccount $creditAccount)
+    public function destroy(int $creditAccount)
     {
         return $this->creditAccountService->destroy($creditAccount);
     }

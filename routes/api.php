@@ -35,7 +35,10 @@ Route::middleware("auth:sanctum")->group(function () {
 
     Route::apiResource("budgets", BudgetController::class);
     Route::apiResource("credit-accounts", CreditAccountController::class);
+
+    Route::post('/goals/{goal}/achived', [GoalController::class, 'setAchived']);
     Route::apiResource("goals", GoalController::class);
+
     Route::apiResource("icons", IconController::class);
     Route::apiResource("transactions", TransactionController::class);
 });

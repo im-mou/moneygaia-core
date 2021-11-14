@@ -2,16 +2,17 @@
 
 namespace App\Services;
 
-use App\Http\Resources\CreditAccountResource;
-use App\Models\CreditAccount;
+use App\Http\Resources\GoalResource;
+use App\Models\Goal;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class CreditAccountService
+class GoalService
 {
     /**
      * Display a listing of the resource.
@@ -20,11 +21,8 @@ class CreditAccountService
      */
     public function index()
     {
-        $credit_accounts = CreditAccount::where("user_id", "=", Auth::user()->id)->paginate(
-            Config::get("constants.pagination.per_page")
-        );
-
-        return CreditAccountResource::collection($credit_accounts);
+        $goals = Goal::where("user_id", "=", Auth::user()->id)->paginate(Config::get("constants.pagination.per_page"));
+        return GoalResource::collection($goals);
     }
 
     /**
@@ -44,8 +42,9 @@ class CreditAccountService
                 }),
             ],
             "description" => "string",
-            "balance" => ["required", Config::get("constants.validate.money")],
-            "credit_account_type" => "required|integer|exists:credit_account_types,id",
+            "ammount" => ["required", Config::get("constants.validate.money")],
+            "due_date" => "required|date|after:today",
+            "icon" => "integer|exists:icons,id",
         ]);
 
         if ($validator->fails()) {
@@ -57,15 +56,17 @@ class CreditAccountService
             );
         }
 
-        $new_credit_account = CreditAccount::create([
+        $new_goal = Goal::create([
             "title" => $request->title,
             "description" => $request->description,
-            "balance" => $request->balance,
+            "ammount" => $request->ammount,
+            "due_date" => Carbon::parse($request->due_date),
+            "achived" => false,
             "user_id" => Auth::user()->id,
-            "credit_account_type_id" => $request->credit_account_type,
+            "icon_id" => $request->icon,
         ]);
 
-        return new CreditAccountResource($new_credit_account);
+        return new GoalResource($new_goal);
     }
 
     /**
@@ -76,9 +77,9 @@ class CreditAccountService
      */
     public function show($id)
     {
-        $credit_account = CreditAccount::where("user_id", Auth::user()->id)->findOrFail($id);
+        $goal = Goal::where("user_id", Auth::user()->id)->findOrFail($id);
 
-        return new CreditAccountResource($credit_account);
+        return new GoalResource($goal);
     }
 
     /**
@@ -98,7 +99,9 @@ class CreditAccountService
                 }),
             ],
             "description" => "string",
-            "credit_account_type" => "integer|exists:credit_account_types,id",
+            "ammount" => [Config::get("constants.validate.money")],
+            "due_date" => "date|after:today",
+            "icon" => "integer|exists:icons,id",
         ]);
 
         if ($validator->fails()) {
@@ -110,23 +113,67 @@ class CreditAccountService
             );
         }
 
-        $credit_account = CreditAccount::where("user_id", Auth::user()->id)->findOrFail($id);
+        $goal = Goal::where("user_id", Auth::user()->id)->findOrFail($id);
 
         if ($request->filled("title")) {
-            $credit_account->title = $request->title;
+            $goal->title = $request->title;
         }
         if ($request->filled("description")) {
-            $credit_account->description = $request->description;
+            $goal->description = $request->description;
         }
-        if ($request->filled("credit_account_type")) {
-            $credit_account->credit_account_type_id = $request->credit_account_type;
+        if ($request->filled("ammount")) {
+            $goal->ammount = $request->ammount;
+        }
+        if ($request->filled("due_date")) {
+            $goal->due_date = Carbon::parse($request->due_date);
+        }
+        if ($request->filled("icon")) {
+            $goal->icon_id = $request->icon;
         }
 
         try {
-            if ($credit_account->isDirty()) {
-                $credit_account->save();
+            if ($goal->isDirty()) {
+                $goal->save();
             }
-            return new CreditAccountResource($credit_account);
+            return new GoalResource($goal);
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    "errors" => ["message" => "Could not update the resource"],
+                ],
+                501
+            );
+        }
+    }
+    /**
+     * Update "achived" column of a the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function setAchived(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            "achived" => "required|boolean",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(
+                [
+                    "errors" => $validator->errors(),
+                ],
+                422
+            );
+        }
+
+        $goal = Goal::where("user_id", Auth::user()->id)->findOrFail($id);
+
+        $goal->achived = $request->achived;
+
+        try {
+            $goal->save();
+            return response()->json(["achived" => $goal->achived], 200);
         } catch (Exception $e) {
             return response()->json(
                 [
@@ -145,10 +192,10 @@ class CreditAccountService
      */
     public function destroy($id)
     {
-        $credit_account = CreditAccount::where("user_id", Auth::user()->id)->findOrFail($id);
+        $goal = Goal::where("user_id", Auth::user()->id)->findOrFail($id);
 
         try {
-            return $credit_account->delete();
+            return $goal->delete();
         } catch (Exception $e) {
             return response()->json(
                 [

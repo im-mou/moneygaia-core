@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Goal;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class GoalFactory extends Factory
@@ -26,7 +27,9 @@ class GoalFactory extends Factory
             'description' => $this->faker->sentence(10),
             'ammount' => $this->faker->randomFloat(2, 5, 2000),
             'due_date' => $this->faker->dateTimeBetween('+0 days', '+2 month'),
-            'achived' => $this->faker->boolean(20),
+            'achived' => $this->faker->boolean(50),
+            "created_at" => Carbon::now()->format('Y-m-d H:i:s'),
+            "updated_at" => Carbon::now()->format('Y-m-d H:i:s'),
         ];
     }
 }

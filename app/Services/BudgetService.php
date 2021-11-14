@@ -21,7 +21,7 @@ class BudgetService
      */
     public function index()
     {
-        $budgets = Budget::where("user_id", "=", Auth::user()->id)->simplePaginate(
+        $budgets = Budget::where("user_id", "=", Auth::user()->id)->paginate(
             Config::get("constants.pagination.per_page")
         );
         return BudgetResource::collection($budgets);
@@ -139,7 +139,9 @@ class BudgetService
         }
 
         try {
-            $budget->save();
+            if ($budget->isDirty()) {
+                $budget->save();
+            }
             return new BudgetResource($budget);
         } catch (Exception $e) {
             return response()->json(

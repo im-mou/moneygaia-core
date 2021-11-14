@@ -42,7 +42,7 @@ class BudgetTest extends TestCase
      */
     public function can_return_a_collection_of_budgets()
     {
-        $count = 100;
+        $count = 50;
 
         $user = $this->create("User", [], false);
         $icon = $this->create("Icon", [], false);
@@ -79,7 +79,13 @@ class BudgetTest extends TestCase
                     ],
                 ],
             ])
-            ->assertJsonCount(Config::get("constants.pagination.per_page"), "data");
+            ->assertJsonPath("meta.total", $count)
+            ->assertJsonCount(
+                $count >= Config::get("constants.pagination.per_page")
+                    ? Config::get("constants.pagination.per_page")
+                    : $count,
+                "data"
+            );
 
         $this->assertDatabaseCount("budgets", $count);
     }
@@ -146,6 +152,7 @@ class BudgetTest extends TestCase
             });
 
         $this->assertDatabaseHas("budgets", [
+            "user_id" => $user->id,
             "title" => $title,
             "description" => $description,
             "ammount" => $ammount,
@@ -165,7 +172,7 @@ class BudgetTest extends TestCase
         $budget = $this->create("Budget", ["user_id" => $user->id, "transaction_type_id" => $transaction_type->id]);
 
         $updated_data = [
-            "title" => ($title = $this->faker->word()),
+            "title" => ($title = $this->faker->word()."_updated"),
             "description" => ($description = $this->faker->sentence(10)),
             "ammount" => ($ammount = $this->randomPrice(0, 500)),
             "start_date" => ($start_date = $this->mockDate($this->faker->dateTimeBetween("+0 days", "+1 month"))),
@@ -217,6 +224,7 @@ class BudgetTest extends TestCase
             });
 
         $this->assertDatabaseHas("budgets", [
+            "user_id" => $user->id,
             "title" => $title,
             "description" => $description,
             "ammount" => $ammount,
@@ -265,6 +273,7 @@ class BudgetTest extends TestCase
             });
 
         $this->assertDatabaseHas("budgets", [
+            "user_id" => $user->id,
             "title" => $budget->title,
             "description" => $budget->description,
             "ammount" => $budget->ammount,
@@ -290,5 +299,66 @@ class BudgetTest extends TestCase
         $this->assertDatabaseMissing("budgets", [
             "id" => $budget->id,
         ]);
+    }
+
+    /**
+     * @test
+     */
+    public function will_fail_if_start_date_is_higher_or_equal_to_end_date()
+    {
+        $user = $this->newUser();
+        $icon = $this->create("Icon", [], false);
+        $transaction_type = $this->create("TransactionType", ["icon_id" => $icon->id], false);
+
+        $new_budget = [
+            "title" => $this->faker->word(),
+            "description" => $this->faker->sentence(10),
+            "ammount" => $this->randomPrice(0, 500),
+            "start_date" => ($start_date = $this->mockDate(Carbon::tomorrow())),
+            "end_date" => ($end_date = $this->mockDate(Carbon::now())),
+            "transaction_type" => $transaction_type->id,
+        ];
+
+        $response = $this->actingAs($user, "sanctum")->json("POST", "/api/budgets", $new_budget);
+
+        $response->assertUnprocessable();
+    }
+
+    /**
+     * @test
+     */
+    public function user_can_only_see_its_own_budgets()
+    {
+        $count1 = 53;
+        $count2 = 37;
+
+        $user1 = $this->create("User", [], false);
+        $user2 = $this->create("User", [], false);
+        $icon = $this->create("Icon", [], false);
+        $transaction_type = $this->create("TransactionType", ["icon_id" => $icon->id], false);
+
+        Budget::insert(
+            Budget::factory()
+                ->count($count1)
+                ->make(["user_id" => $user1->id, "transaction_type_id" => $transaction_type->id])
+                ->toArray()
+        );
+
+        Budget::insert(
+            Budget::factory()
+                ->count($count2)
+                ->make(["user_id" => $user2->id, "transaction_type_id" => $transaction_type->id])
+                ->toArray()
+        );
+
+        $this->actingAs($user2, "sanctum")
+            ->json("GET", "/api/budgets")
+            ->assertStatus(200)
+            ->assertJsonPath("meta.total", $count2);
+
+        $this->actingAs($user1, "sanctum")
+            ->json("GET", "/api/budgets")
+            ->assertStatus(200)
+            ->assertJsonPath("meta.total", $count1);
     }
 }

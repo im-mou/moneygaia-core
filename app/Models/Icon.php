@@ -12,17 +12,12 @@ class Icon extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'enabled' => 'boolean'
+        "enabled" => "boolean",
     ];
 
-    const ACCOUNTS_GROUP = 'accounts';
-    const TRANSACTIONS_GROUP = 'transactions';
-    const GOALS_GROUP = 'goals';
+    const ACCOUNTS_GROUP = "accounts";
+    const TRANSACTIONS_GROUP = "transactions";
+    const GOALS_GROUP = "goals";
 
-    const ALLOWED_GROUPS = [
-        self::ACCOUNTS_GROUP,
-        self::TRANSACTIONS_GROUP,
-        self::GOALS_GROUP,
-    ];
-
+    const ALLOWED_GROUPS = [self::ACCOUNTS_GROUP, self::TRANSACTIONS_GROUP, self::GOALS_GROUP];
 }
